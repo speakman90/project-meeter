@@ -15,7 +15,3 @@ WORKDIR /var/www/project-meeter
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 RUN curl -sS https://get.symfony.com/cli/installer | bash
-
-RUN git config --global user.email "pierredumas90000@gmail.com" \ 
-    && git config --global user.name "speakman90"
-

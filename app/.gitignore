@@ -5,7 +5,8 @@
 var/
 /vendor/
 /.env
-
+/node_modules/
+/public/build/
 ###< symfony/framework-bundle ###
 
 ###> phpunit/phpunit ###

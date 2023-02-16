@@ -69,6 +69,9 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'userSender', targetEntity: Messages::class)]
     private Collection $messages;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $lastLocation = null;
+
     public function __construct()
     {
         $this->activities = new ArrayCollection();
@@ -339,6 +342,18 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
                 $message->setUserSender(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLastLocation(): ?string
+    {
+        return $this->lastLocation;
+    }
+
+    public function setLastLocation(?string $lastLocation): self
+    {
+        $this->lastLocation = $lastLocation;
 
         return $this;
     }

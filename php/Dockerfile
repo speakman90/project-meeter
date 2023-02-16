@@ -15,3 +15,7 @@ WORKDIR /var/www/project-meeter
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 RUN curl -sS https://get.symfony.com/cli/installer | bash
+
+RUN curl -sL https://deb.nodesource.com/setup_18.x -o nodesource_setup.sh
+RUN bash nodesource_setup.sh
+RUN apt install nodejs

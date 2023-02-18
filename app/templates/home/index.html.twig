@@ -4,9 +4,24 @@
 
 {% block body %}
 
-    <h1>Trouve ton humain</h1>
-
-    <a>Inscris toi</a>
-    <a>Connecte-toi</a>
+    <div class="flex flex-col h-screen justify-around">
+        <div class="flex flex-row justify-around w-screen">
+            <div class="img-home"> 
+                <img src="{{asset('build/images/img-home-1.jpg')}}"/>
+            </div>
+            <div class="img-home">
+                <img src="{{asset('build/images/img-home-2.jpg')}}"/>
+            </div>
+        </div>
+        <div class="flex flex-col items-center">
+            <div class="flex flex-col items-center">
+                <h1 class="text-2xl font-bold">Trouve ton humain</h1>
+            </div>
+            <div class="flex flex-col items-center">
+                <a href={{path('app_register')}} class="rounded-full bg-[#4C164D] p-3 px-12 m-2 text-white">Inscris-toi</a>
+                <a href={{path('app_login')}} class="rounded-full bg-[#4C164D] p-3 px-10 m-2 text-white">Connecte-toi</a>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

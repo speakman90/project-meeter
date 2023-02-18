@@ -3,5 +3,26 @@
 @tailwind utilities;
 
 body {
-    background-color: lightgray;
+	background: linear-gradient(-45deg, #F9ECF7, #e73c7e, #BF6EA9, #FAF1F8);
+	background-size: 400% 400%;
+	animation: gradient 15s ease infinite;
+	height: 100vh;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+.img-home {
+    height: 96%;
+    width: 36.2%;
+    clip-path:ellipse(33% 50%);
 }

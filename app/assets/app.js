@@ -10,5 +10,7 @@ import './styles/app.css';
 
 import '../node_modules/flowbite/dist/flowbite.min.js';
 
+import '../node_modules/flowbite/dist/datepicker.js';
+
 // start the Stimulus application
 // import './bootstrap';

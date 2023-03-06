@@ -62,12 +62,6 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Activities::class, mappedBy: 'userActivity')]
     private Collection $activities;
 
-    #[ORM\ManyToOne(inversedBy: 'like1')]
-    private ?Likes $like1 = null;
-
-    #[ORM\ManyToOne(inversedBy: 'like2')]
-    private ?Likes $like2 = null;
-
     #[ORM\OneToMany(mappedBy: 'userSender', targetEntity: Messages::class)]
     private Collection $messages;
 
@@ -77,11 +71,19 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
+    #[ORM\OneToMany(mappedBy: 'user1', targetEntity: Likes::class)]
+    private Collection $user1;
+
+    #[ORM\OneToMany(mappedBy: 'user2', targetEntity: Likes::class)]
+    private Collection $user2;
+
     public function __construct()
     {
         $this->createDate = new \DateTimeImmutable();
         $this->activities = new ArrayCollection();
         $this->messages = new ArrayCollection();
+        $this->user1 = new ArrayCollection();
+        $this->user2 = new ArrayCollection();
     }
 
     public function getEmail(): ?string
@@ -298,30 +300,6 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getLike1(): ?Likes
-    {
-        return $this->like1;
-    }
-
-    public function setLike1(?Likes $like1): self
-    {
-        $this->like1 = $like1;
-
-        return $this;
-    }
-
-    public function getLike2(): ?Likes
-    {
-        return $this->like2;
-    }
-
-    public function setLike2(?Likes $like2): self
-    {
-        $this->like2 = $like2;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Messages>
      */
@@ -377,6 +355,66 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Likes>
+     */
+    public function getUser1(): Collection
+    {
+        return $this->user1;
+    }
+
+    public function addUser1(Likes $user1): self
+    {
+        if (!$this->user1->contains($user1)) {
+            $this->user1->add($user1);
+            $user1->setUser1($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser1(Likes $user1): self
+    {
+        if ($this->user1->removeElement($user1)) {
+            // set the owning side to null (unless already changed)
+            if ($user1->getUser1() === $this) {
+                $user1->setUser1(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Likes>
+     */
+    public function getUser2(): Collection
+    {
+        return $this->user2;
+    }
+
+    public function addUser2(Likes $user2): self
+    {
+        if (!$this->user2->contains($user2)) {
+            $this->user2->add($user2);
+            $user2->setUser2($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser2(Likes $user2): self
+    {
+        if ($this->user2->removeElement($user2)) {
+            // set the owning side to null (unless already changed)
+            if ($user2->getUser2() === $this) {
+                $user2->setUser2(null);
+            }
+        }
 
         return $this;
     }

@@ -44,14 +44,14 @@
                 </button>
             </div>
             <!-- Modal body -->
-                 {{ render('/register') }}
+                 {{ render(controller('App\\Controller\\RegistrationController::register')) }}
             <!-- Modal footer -->
-            <div class="flex items-center justify-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+            {# <div class="flex items-center justify-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
                     <button class="btn btn-lg btn-primary" type="submit">
                         Valider mon inscription
                     </button>
                 </form>
-            </div>
+            </div> #}
         </div>
     </div>
 </div>
@@ -72,14 +72,7 @@
                 </button>
             </div>
             <!-- Modal body -->
-                 {{ render('/login') }}
-            <!-- Modal footer -->
-            <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
-                    <button class="btn btn-lg btn-primary" type="submit">
-                        Se connecter
-                    </button>
-                </form>
-            </div>
+                 {{ render(controller('App\\Controller\\SecurityController::login')) }}
         </div>
     </div>
 </div>

@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UsersRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'Cette email n\'est pas disponible')]
@@ -45,6 +46,14 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $biography = null;
 
     #[ORM\Column]
+    // #[Assert\Count(
+    //     max: 6,
+    //     maxMessage: "Vous ne pouvez pas télécharger plus de {{ limit }} images."
+    // )]
+    // #[Assert\All(
+    //     mimeTypes: ["image/jpeg", "image/png", "image/gif"],
+    //     mimeTypesMessage: "Veuillez télécharger un fichier de type image (JPG, PNG, GIF)",
+    // )]
     private array $profilPhotos = [];
 
     #[ORM\Column(length: 255, nullable: true)]

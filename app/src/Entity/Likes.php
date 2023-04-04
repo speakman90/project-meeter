@@ -16,12 +16,6 @@ class Likes
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToMany(mappedBy: 'like1', targetEntity: Users::class)]
-    private Collection $like1;
-
-    #[ORM\OneToMany(mappedBy: 'like2', targetEntity: Users::class)]
-    private Collection $like2;
-
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateMatch = null;
 
@@ -31,76 +25,20 @@ class Likes
     #[ORM\OneToMany(mappedBy: 'likes', targetEntity: Messages::class)]
     private Collection $messages;
 
+    #[ORM\ManyToOne(inversedBy: 'user1')]
+    private ?Users $user1 = null;
+
+    #[ORM\ManyToOne(inversedBy: 'user2')]
+    private ?Users $user2 = null;
+
     public function __construct()
     {
-        $this->like1 = new ArrayCollection();
-        $this->like2 = new ArrayCollection();
         $this->messages = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    /**
-     * @return Collection<int, Users>
-     */
-    public function getLike1(): Collection
-    {
-        return $this->like1;
-    }
-
-    public function addLike1(Users $like1): self
-    {
-        if (!$this->like1->contains($like1)) {
-            $this->like1->add($like1);
-            $like1->setLike1($this);
-        }
-
-        return $this;
-    }
-
-    public function removeLike1(Users $like1): self
-    {
-        if ($this->like1->removeElement($like1)) {
-            // set the owning side to null (unless already changed)
-            if ($like1->getLike1() === $this) {
-                $like1->setLike1(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Users>
-     */
-    public function getLike2(): Collection
-    {
-        return $this->like2;
-    }
-
-    public function addLike2(Users $like2): self
-    {
-        if (!$this->like2->contains($like2)) {
-            $this->like2->add($like2);
-            $like2->setLike2($this);
-        }
-
-        return $this;
-    }
-
-    public function removeLike2(Users $like2): self
-    {
-        if ($this->like2->removeElement($like2)) {
-            // set the owning side to null (unless already changed)
-            if ($like2->getLike2() === $this) {
-                $like2->setLike2(null);
-            }
-        }
-
-        return $this;
     }
 
     public function getDateMatch(): ?\DateTimeInterface
@@ -153,6 +91,30 @@ class Likes
                 $message->setLikes(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser1(): ?Users
+    {
+        return $this->user1;
+    }
+
+    public function setUser1(?Users $user1): self
+    {
+        $this->user1 = $user1;
+
+        return $this;
+    }
+
+    public function getUser2(): ?Users
+    {
+        return $this->user2;
+    }
+
+    public function setUser2(?Users $user2): self
+    {
+        $this->user2 = $user2;
 
         return $this;
     }

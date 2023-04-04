@@ -3,5 +3,10 @@
 @tailwind utilities;
 
 body {
-    background-color: lightgray;
+	background: url('../images/background.gif') no-repeat;
+	background-size: cover;
+}
+
+.img-home {
+    width: 20%;
 }

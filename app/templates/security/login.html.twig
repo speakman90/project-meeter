@@ -3,7 +3,7 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
-<form method="post">
+<form method="post" class="flex flex-col items-center">
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
@@ -14,29 +14,32 @@
         </div>
     {% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
+    <div class="p-3">
+        <label for="inputEmail" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" autocomplete="email" required autofocus>
+    </div>
+    <div class="p-3">
+        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="inputPassword">Mot de passe</label>
+        <input type="password" name="password" id="inputPassword" class="form-control bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" autocomplete="current-password" required>
+    </div>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
     {#
         Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
         See https://symfony.com/doc/current/security/remember_me.html
-
-        <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" name="_remember_me"> Remember me
+    #}
+        <div class="p-3">
+            <label class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300 flex items-center">
+                <input class="rounded-t rounded-b mr-2" type="checkbox" name="_remember_me"> Me garder connecté
             </label>
         </div>
-    #}
+    
+        <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+            <button class="text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l transition-all ease-in duration-75 focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2" type="submit">
+                Se connecter
+            </button>
+        </div>
 
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
 </form>
+
 {% endblock %}

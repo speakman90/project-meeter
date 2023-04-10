@@ -13,13 +13,6 @@ class HomeController extends AbstractController
     public function index(Request $request): Response
     {
 
-        if($request->get('registration_form'))
-        {
-            $this->forward('App\Controller\RegistrationController::register', [
-            'user'=>  $request->get('registration_form')
-            ]);
-        }
-
         if($request->get('email') || $request->get('password'))
         {
             $this->forward('App\Controller\SecurityController::login', [
@@ -27,7 +20,6 @@ class HomeController extends AbstractController
                 'password'=> $request->get('password')
                 ]);
         }
-
 
         return $this->render('home/index.html.twig');
     }

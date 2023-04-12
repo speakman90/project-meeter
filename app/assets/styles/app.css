@@ -2,10 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+/* body {
 	background: url('../images/background.gif') no-repeat;
 	background-size: cover;
-}
+} */
 
 .img-home {
     width: 20%;

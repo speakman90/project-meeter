@@ -68,6 +68,29 @@ class RegistrationController extends AbstractController
         ]);
     }
 
+    #[Route(path: '/api/v1/register', name: 'api_register', methods:['POST'])]
+    public function registerApi(Request $request): Response
+    {
+        $response = new Response;
+        $datas = json_decode($request->getContent(), true);
+
+        foreach($datas as $data)
+        {
+            if($data == null)
+            {
+                return $response->setStatusCode(Response::HTTP_NOT_ACCEPTABLE);
+            }
+            else
+            {
+                $user = $this->getUser();
+                
+                $response->setStatusCode(Response::HTTP_OK);
+            }
+        }
+
+        return $response->setStatusCode(Response::HTTP_OK);
+    }
+
     #[Route('/verify/email', name: 'app_verify_email')]
     public function verifyUserEmail(Request $request, TranslatorInterface $translator): Response
     {

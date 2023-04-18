@@ -95,6 +95,11 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         $this->user2 = new ArrayCollection();
     }
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
     public function getEmail(): ?string
     {
         return $this->email;
@@ -122,7 +127,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string) $this->userName;
     }
 
     /**

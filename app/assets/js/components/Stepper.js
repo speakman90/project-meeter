@@ -18,11 +18,7 @@ export default function HorizontalLinearStepper() {
 
   const handleFileEvent = (e) => {
     const files = e.target.files;
-    const formData = [];
-    for(let i = 0; i < files.length; i++) {
-      formData.push(files[i])
-      setProfil(formData[i])
-    }
+    setProfil(files)
   }
 
   let handleSubmit = async (e) => {
@@ -40,14 +36,12 @@ export default function HorizontalLinearStepper() {
           genre: genre,
           profil: profil
         }
+      }).then(function (response) {
+        if(response.status === 200) {location.reload()};
       });
     } catch (err) {
       console.log(err);
     }
-  };
-
-  const isStepOptional = (step) => {
-    return step === 1;
   };
 
   const isStepSkipped = (step) => {
@@ -67,10 +61,6 @@ export default function HorizontalLinearStepper() {
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleReset = () => {
-    setActiveStep(0);
   };
 
   const countCharacter = (e) => {
@@ -140,6 +130,14 @@ export default function HorizontalLinearStepper() {
             Votre inscription est finito !
           </Typography>
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                        <Button
+              color="inherit"
+              disabled={activeStep === 0}
+              onClick={handleBack}
+              sx={{ mr: 1 }}
+            >
+              Retour en arrière
+            </Button>
             <Box sx={{ flex: '1 1 auto' }} />
             <Link to="/profil" className="btn btn-primary" onClick={handleSubmit}>Découvre le nouveau monde</Link>
           </Box>

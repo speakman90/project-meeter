@@ -9,6 +9,8 @@ use App\Security\EmailVerifier;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
@@ -17,6 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class RegistrationController extends AbstractController
 {
@@ -66,6 +69,58 @@ class RegistrationController extends AbstractController
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
+    }
+
+    #[Route(path: '/api/v1/register', name: 'api_register', methods:['POST'])]
+    public function registerApi(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    {
+        $id = $this->getUser()->getId();
+        $user = $entityManager->getRepository(Users::class)->find($id);
+        $response = new Response;
+        $datas = $request->request;
+        $files = $request->files;
+
+        if($datas == null && $files == null)
+        {
+            return $response->setStatusCode(Response::HTTP_NOT_ACCEPTABLE);
+        }
+        else
+        {
+            $user->setBiography($datas->get('bio'));
+            $user->setOrientations([intval($datas->get('genre'))]);
+            foreach($files as $filez)
+            {
+                foreach($filez as $file)
+                {
+                    $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                    // this is needed to safely include the file name as part of the URL
+                    $safeFilename = $slugger->slug($originalFilename);
+                    $newFilename = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
+                    $profilPhoto[] = $newFilename;
+                    // Move the file to the directory where brochures are stored
+                    try {
+                        $file->move(
+                            $this->getParameter('brochures_directory').$this->getUser()->getUsername().$id,
+                            $newFilename
+                        );
+
+                    } catch (FileException $e) {
+                        // ... handle exception if something happens during file upload
+                    }
+
+                    // updates the 'brochureFilename' property to store the PDF file name
+                    // instead of its contents
+                }
+            }
+
+            $user->setProfilPhotos($profilPhoto);
+
+            $entityManager->flush();
+
+            return $response->setStatusCode(Response::HTTP_OK);
+        }
+
+        return $response->setStatusCode(Response::HTTP_OK);
     }
 
     #[Route('/verify/email', name: 'app_verify_email')]

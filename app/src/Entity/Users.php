@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UsersRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -201,6 +202,13 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         $this->birthDate = $birthDate;
 
         return $this;
+    }
+
+    public function getAge()
+    {
+        $date_actuelle = new DateTime();
+        $diff = $date_actuelle->diff($this->birthDate);
+        return  $diff->y;
     }
 
     public function getCreateDate(): ?\DateTimeInterface
@@ -431,6 +439,14 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
 }

@@ -69,23 +69,26 @@ class RegistrationController extends AbstractController
     }
 
     #[Route(path: '/api/v1/register', name: 'api_register', methods:['POST'])]
-    public function registerApi(Request $request): Response
+    public function registerApi(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $id = $this->getUser()->getId();
+        $user = $entityManager->getRepository(Users::class)->find($id);
         $response = new Response;
-        $datas = json_decode($request->getContent(), true);
+        $datas = $request->request;
+        $files = $request->files;
 
-        foreach($datas as $data)
+        if($datas == null && $files == null)
         {
-            if($data == null)
-            {
-                return $response->setStatusCode(Response::HTTP_NOT_ACCEPTABLE);
-            }
-            else
-            {
-                $user = $this->getUser();
-                
-                $response->setStatusCode(Response::HTTP_OK);
-            }
+            return $response->setStatusCode(Response::HTTP_NOT_ACCEPTABLE);
+        }
+        else
+        {
+            $user->setBiography($datas->get('bio'));
+            $user->setOrientations([intval($datas->get('genre'))]);
+
+            $entityManager->flush();
+
+            $response->setStatusCode(Response::HTTP_OK);
         }
 
         return $response->setStatusCode(Response::HTTP_OK);

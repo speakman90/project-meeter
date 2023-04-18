@@ -1,4 +1,5 @@
 import * as React from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom'
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
@@ -15,28 +16,31 @@ export default function HorizontalLinearStepper() {
   const [genre, setGenre] = React.useState([1]);
   const [profil, setProfil] = React.useState([]);
 
-  const handleFileEvent =  (e) => {
-      console.log(e.target.files)
-      setProfil(e.target.files)
+  const handleFileEvent = (e) => {
+    const files = e.target.files;
+    const formData = [];
+    for(let i = 0; i < files.length; i++) {
+      formData.push(files[i])
+      setProfil(formData[i])
+    }
   }
-  
+
   let handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      let res = await fetch("http://localhost/api/v1/register", {
-        method: "POST",
-        body: JSON.stringify({
+      axios({
+        method: 'post',
+        url: '/api/v1/register',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Accept': 'multipart/form-data'
+        },
+        data: {
           bio: bio,
-          orientation: genre,
-          profilPicture: profil
-        })
+          genre: genre,
+          profil: profil
+        }
       });
-      let resJson = await res.json();
-      if (res.status === 200) {
-        setMessage("Ok");
-      } else {
-        setMessage("Some error occured");
-      }
     } catch (err) {
       console.log(err);
     }

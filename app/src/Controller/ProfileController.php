@@ -11,16 +11,26 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
+
 class ProfileController extends AbstractController
 {
     #[Route('/profil', name: 'app_profile')]
     public function index(): Response
     {
-//        if($this->getUser()->getBiography() == null && empty($this->getUser()->getProfilPhotos()[0]))
-//        {
-//            return $this->render('profile/register.html.twig');
-//        }
-//        dd($this->getUser());
+    
+        if($this->getUser() !== null)
+        {
+            if($this->getUser()->getBiography() == null && empty($this->getUser()->getProfilPhotos()[0]))
+            {
+                return $this->render('profile/register.html.twig');
+            }
+            
+        }
+        else
+        {
+            return $this->redirectToRoute('app_home');
+        }
+
         return $this->render('profile/index.html.twig');
     }
 

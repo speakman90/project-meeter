@@ -93,23 +93,20 @@ class RegistrationController extends AbstractController
                 foreach($filez as $file)
                 {
                     $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                    // this is needed to safely include the file name as part of the URL
                     $safeFilename = $slugger->slug($originalFilename);
                     $newFilename = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
                     $profilPhoto[] = $newFilename;
-                    // Move the file to the directory where brochures are stored
+
                     try {
                         $file->move(
-                            $this->getParameter('brochures_directory').$this->getUser()->getUsername().$id,
+                            $this->getParameter('photos_directory').$this->getUser()->getUsername().$id,
                             $newFilename
                         );
 
                     } catch (FileException $e) {
-                        // ... handle exception if something happens during file upload
+  
                     }
 
-                    // updates the 'brochureFilename' property to store the PDF file name
-                    // instead of its contents
                 }
             }
 

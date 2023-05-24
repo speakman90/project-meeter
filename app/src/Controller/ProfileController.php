@@ -2,14 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\Activities;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 
 class ProfileController extends AbstractController
@@ -120,6 +122,7 @@ class ProfileController extends AbstractController
         $entityManager->flush();
         return $this->redirectToRoute('app_profile');
     }
+
     #[Route('/profil/addJob', name: 'add_job', methods: 'POST')]
     public function addJob(Request $request, ManagerRegistry $doctrine): RedirectResponse
     {
@@ -137,6 +140,7 @@ class ProfileController extends AbstractController
         $entityManager->flush();
         return $this->redirectToRoute('app_profile');
     }
+
     #[Route('/profil/addCity', name: 'add_city', methods: 'POST')]
     public function addCity(Request $request, ManagerRegistry $doctrine): RedirectResponse
     {
@@ -154,5 +158,27 @@ class ProfileController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
         return $this->redirectToRoute('app_profile');
+    }
+
+    #[Route('/api/v1/getActivities', name: 'api_activities', methods: 'GET')]
+    public function getActivites(Request $request, EntityManagerInterface $entityManager)
+    {
+        $activities = $entityManager->getRepository(Activities::class)->findAll();
+        $arrayActivities = [];
+
+        foreach ($activities as $key => $activity) 
+        {
+            // $arrayActivities[] = 'label' => $activity->getName();
+        }
+
+
+
+        $response = new Response();
+
+        $response->setContent(json_encode($arrayActivities));
+        $response->headers->set('Content-Type', 'application/json');
+        
+        return $response;
+
     }
 }

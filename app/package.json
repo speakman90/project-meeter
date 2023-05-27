@@ -29,8 +29,8 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "@emotion/react": "^11.10.6",
-        "@emotion/styled": "^11.10.6",
+        "@emotion/react": "^11.11.0",
+        "@emotion/styled": "^11.11.0",
         "@mui/icons-material": "^5.11.11",
         "@mui/material": "^5.11.15",
         "@mui/styled-engine-sc": "^5.11.11",

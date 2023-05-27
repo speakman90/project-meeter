@@ -164,21 +164,11 @@ class ProfileController extends AbstractController
     public function getActivites(Request $request, EntityManagerInterface $entityManager)
     {
         $activities = $entityManager->getRepository(Activities::class)->findAll();
-        $arrayActivities = [];
-
-        foreach ($activities as $key => $activity) 
-        {
-            // $arrayActivities[] = 'label' => $activity->getName();
-        }
-
-
-
-        $response = new Response();
-
-        $response->setContent(json_encode($arrayActivities));
-        $response->headers->set('Content-Type', 'application/json');
         
-        return $response;
+        return $this->json(
+            $activities,
+            headers: ['Content-Type', 'application/json;charset=UTF-8']
+        );
 
     }
 }

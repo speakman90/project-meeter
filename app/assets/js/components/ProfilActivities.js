@@ -14,7 +14,9 @@ function sleep(delay = 0) {
 
 function ComboBox() {
   const [open, setOpen] = useState(false);
-  const [activity, setActivity] = useState({})
+  const [value, setValue] = useState('');
+  const [inputValue, setInputValue] = useState('');
+  const [activity, setActivity] = useState({});
   const loading = open && activity.length === 0;
 
     useEffect(() => {
@@ -40,7 +42,7 @@ function ComboBox() {
       }
     }, [open]);
 
-    const handleSubmit = async (e) => {
+    let handleSubmit = async (e) => {
       e.preventDefault();
       try {
         axios({
@@ -51,8 +53,7 @@ function ComboBox() {
             'Accept': 'multipart/form-data'
           },
           data: {
-            activities: id,
-            user: id,
+            id: value.id
           }
         }).then(function (response) {
           if(response.status === 200) {location.reload()};
@@ -60,7 +61,7 @@ function ComboBox() {
       } catch (err) {
         console.log(err);
       }
-    };
+        }
 
   return (
     <>
@@ -68,6 +69,14 @@ function ComboBox() {
         id="combo-box-demo"
         options={activity}
         open={open}
+        value={value}
+        onChange={(event, newValue) => {
+          setValue(newValue);
+        }}
+        inputValue={inputValue}
+        onInputChange={(event, newInputValue) => {
+          setInputValue(newInputValue);
+        }}
         onOpen={() => {
           setOpen(true);
         }}

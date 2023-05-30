@@ -2,17 +2,20 @@
 
 namespace App\Controller;
 
+use App\Entity\Users;
 use App\Entity\Activities;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-
 
 class ProfileController extends AbstractController
 {
@@ -161,14 +164,49 @@ class ProfileController extends AbstractController
     }
 
     #[Route('/api/v1/getActivities', name: 'api_activities', methods: 'GET')]
-    public function getActivites(Request $request, EntityManagerInterface $entityManager)
+    public function getActivites(EntityManagerInterface $entityManager)
     {
         $activities = $entityManager->getRepository(Activities::class)->findAll();
         
-        return $this->json(
-            $activities,
-            headers: ['Content-Type', 'application/json;charset=UTF-8']
-        );
+        $encoders = [new JsonEncoder()]; // If no need for XmlEncoder
+        $normalizers = [new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+        
+        // Serialize your object in Json
+        $jsonObject = $serializer->serialize($activities, 'json', [
+            'circular_reference_handler' => function ($object) {
+                return $object;
+            }
+        ]);
+        
+        // For instance, return a Response with encoded Json
+        return new Response($jsonObject, 200, ['Content-Type' => 'application/json']);
+    }
+
+    #[Route('/api/v1/addActivities', name: 'api_activities_add', methods: 'POST')]
+    public function addActivites(Request $request, EntityManagerInterface $entityManager)
+    {
+        $id = $this->getUser()->getId();
+        $user = $entityManager->getRepository(Users::class)->find($id);
+        $response = new Response;
+        $datas = $request->request;
+
+        if($datas == null)
+        {
+            return $response->setStatusCode(Response::HTTP_NOT_ACCEPTABLE);
+        }
+        else
+        {
+            $activities = $entityManager->getRepository(Activities::class)->find($datas->get('id'));
+            
+            $user->addActivity($activities);
+
+            $entityManager->flush();
+
+            return $response->setStatusCode(Response::HTTP_OK);
+        }
+
+        return $response->setStatusCode(Response::HTTP_OK);
 
     }
 }

@@ -70,6 +70,16 @@
         </form>
         <div class="relative">
             <div id='activities'></div>
+            <h2 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">Vos activitées préférée : </h2>
+            <ul class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
+                {% if app.user.activities[0] is defined  %}
+                    {% for activity in app.user.activities %}
+                        <li>{{activity.name}}</li>
+                    {% endfor %}
+                {% else %}
+                <p>Pas d'activité séléctionné</p>
+                {% endif %}
+            </ul>
         </div>
     </div>
 </section>

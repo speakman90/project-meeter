@@ -7,8 +7,9 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { createRoot } from 'react-dom/client';
 
-export default function HorizontalLinearStepper() {
+function HorizontalLinearStepper() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const [count, setCount] = React.useState(200);
@@ -139,8 +140,8 @@ export default function HorizontalLinearStepper() {
               Retour en arrière
             </Button>
             <Box sx={{ flex: '1 1 auto' }} />
-            <Link to="/profil" className="btn btn-primary" onClick={handleSubmit}>Découvre le nouveau monde</Link>
-          </Box>
+              <Link to="/profil" className="btn btn-primary" onClick={handleSubmit}>Découvre le nouveau monde</Link>
+            </Box>
         </React.Fragment>
       ) : (
         <React.Fragment>
@@ -166,3 +167,9 @@ export default function HorizontalLinearStepper() {
     </Box>
   );
 }
+
+const Dom = document.getElementById('app') ? document.getElementById('app') : null
+
+const root = Dom ? createRoot(Dom) : null;
+
+root ? root.render(<HorizontalLinearStepper />) : null;

@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\ActivitiesRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ActivitiesRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ActivitiesRepository::class)]
 class Activities
@@ -13,11 +14,14 @@ class Activities
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups("user")]
     private ?int $id = null;
 
+    #[Groups("user")]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[Groups("user")]
     #[ORM\ManyToMany(targetEntity: Users::class, inversedBy: 'activities')]
     private Collection $userActivity;
 
